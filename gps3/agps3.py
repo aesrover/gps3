@@ -63,6 +63,7 @@ class GPSDSocket(object):
             except (OSError, IOError) as error:
                 sys.stderr.write('\r\nGPSDSocket.connect exception is--> {}'.format(error))
                 sys.stderr.write('\r\nAGPS3 connection to a gpsd at \'{0}\' on port \'{1}\' failed\r\n'.format(host, port))
+                raise
 
     def watch(self, enable=True, gpsd_protocol=PROTOCOL, devicepath=None):
         """watch gpsd in various gpsd_protocols or devices.
@@ -98,6 +99,7 @@ class GPSDSocket(object):
             self.streamSock.send(commands)  # 2.7 chokes on 'bytes' and 'encoding='
         except (OSError, IOError) as error:  # HEY MOE, LEAVE THIS ALONE FOR NOW!
             sys.stderr.write('\nAGPS3 send command fail with {}\n'.format(error))  # [Errno 107] Transport endpoint is not connected
+            raise
 
     def __iter__(self):
         """banana"""  # <--- for scale
@@ -121,6 +123,7 @@ class GPSDSocket(object):
 
         except StopIteration as error:
             sys.stderr.write('The readline exception in GPSDSocket.next is--> {}'.format(error))
+            raise
 
     __next__ = next  # Workaround for changes in iterating between Python 2.7 and 3
 
@@ -177,11 +180,11 @@ class DataStream(object):
 
         except AttributeError:  # 'str' object has no attribute 'keys'
             sys.stderr.write('There is an unexpected exception unpacking JSON object')
-            return
+            raise
 
         except (ValueError, KeyError) as error:
             sys.stderr.write(str(error))  # Extra data or aberrant data in stream.
-            return
+            raise
 
 
 if __name__ == '__main__':
