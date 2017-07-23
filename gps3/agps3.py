@@ -176,7 +176,7 @@ class DataStream(object):
             fresh_data = json.loads(gpsd_socket_response)  # 'class' is popped for iterator lead
             class_name = fresh_data.pop('class')
             for key in self.packages[class_name]:
-                setattr(self, key, fresh_data.get(key, 'n/a'))  # Updates and restores 'n/a' if attribute is absent in the data
+                setattr(self, key, fresh_data.get(key, None))  # Updates and restores 'n/a' if attribute is absent in the data
 
         except AttributeError:  # 'str' object has no attribute 'keys'
             sys.stderr.write('There is an unexpected exception unpacking JSON object')
