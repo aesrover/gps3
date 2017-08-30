@@ -159,7 +159,7 @@ class DataStream(object):
         """Potential data packages from gpsd for a generator of class attributes"""
         for laundry_list in self.packages.values():
             for thingy in laundry_list:
-                setattr(self, thingy, 'n/a')
+                setattr(self, thingy, None)
 
     def unpack(self, gpsd_socket_response):
         """Sets new socket data as DataStream attributes in those initialised dictionaries
